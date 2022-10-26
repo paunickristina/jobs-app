@@ -1,11 +1,15 @@
 ## Installation
 
+### Terminal 1
+
 ```bash
 $ cd backend
 $ npm install
 # watch mode
 $ npm run start:dev
 ```
+
+### Terminal 1
 
 ```bash
 $ cd frontend
