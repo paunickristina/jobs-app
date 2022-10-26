@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <header>
-      <div className="bg-red-700 text-white p-5">
+      {/* <div className="bg-red-700 text-white p-5">
         <p>You need to log in or sign up before continuing.</p>
       </div>
       <div className="bg-green-400 text-white p-5">
         <p>Signed in successfully.</p>
-      </div>
+      </div> */}
       <nav>
         <ul className="flex justify-end p-5">
           {/* <li className="mr-4">

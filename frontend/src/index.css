@@ -10,3 +10,31 @@ body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  /* This won't be included in your compiled CSS unless you actually use it */
+  .description h2 {
+    font-size: 32px;
+    font-weight: bold;
+  }
+  .description h3 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .description h4 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .description ul {
+    padding-left: 17px;
+  }
+  .description ol {
+    padding-left: 17px;
+  }
+  .description ul li {
+    list-style-type: disc;
+  }
+  .description ol li {
+    list-style-type: decimal;
+  }
+}

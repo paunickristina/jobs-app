@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useJobsContext } from "../../hooks/useJobsContext";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
 
 const CreateJob = () => {
   const { dispatch } = useJobsContext();
   const [name, setName] = useState("");
-  const [seniority, setSeniority] = useState("");
+  const [seniority, setSeniority] = useState("default");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [notification, setNotification] = useState(null);
@@ -32,7 +34,7 @@ const CreateJob = () => {
 
       if (response.ok) {
         setName("");
-        setSeniority("");
+        setSeniority("default");
         setLocation("");
         setDescription("");
         setNotification("New job created successfully.");
@@ -71,7 +73,7 @@ const CreateJob = () => {
                 <div className="relative">
                   <select
                     onChange={(e) => setSeniority(e.target.value)}
-                    defaultValue={"default"}
+                    value={seniority}
                     className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-3 pr-8 rounded-md focus:outline-none focus:border-gray-500 capitalize"
                   >
                     <option value={"default"} disabled>
@@ -106,7 +108,7 @@ const CreateJob = () => {
           </div>
           {/* description(replace with ck editor): */}
           <div>
-            <label>
+            {/* <label>
               <span className="block text-gray-700 text-sm mb-2">
                 Description
               </span>
@@ -118,20 +120,41 @@ const CreateJob = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 value={description}
               ></textarea>
-            </label>
+            </label> */}
+            <CKEditor
+              editor={ClassicEditor}
+              config={{
+                toolbar: [
+                  "heading",
+                  "|",
+                  "bold",
+                  "italic",
+                  "link",
+                  "undo",
+                  "redo",
+                  "bulletedList",
+                  "numberedList",
+                  "blockQuote",
+                ],
+                placeholder: "Insert job description...",
+              }}
+              onReady={(editor) => {
+                // You can store the "editor" and use when it is needed.
+                console.log("Editor is ready to use!", editor);
+              }}
+              onChange={(e, editor) => {
+                const data = editor.getData();
+                console.log({ e, editor, data });
+                setDescription(data);
+              }}
+              // onBlur={(event, editor) => {
+              //   console.log("Blur.", editor);
+              // }}
+              // onFocus={(event, editor) => {
+              //   console.log("Focus.", editor);
+              // }}
+            />
           </div>
-          {/* upload image: */}
-          {/* <div className="mb-4 md:mb-0">
-            <label>
-              <span className="block text-gray-700 text-sm mb-2">
-                Logo Image
-              </span>
-              <input
-                type="file"
-                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded-md p-3 mb-3 focus:outline-none focus:bg-white focus:border-gray-500"
-              />
-            </label>
-          </div> */}
         </div>
         <div>
           <button className="bg-violet-800 text-white px-3 py-2 rounded-md mb-4">

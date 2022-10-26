@@ -6,9 +6,10 @@ import { JobsContextProvider } from "./context/JobsContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  // ck editor won't work in a strict mode
+  // <React.StrictMode>
     <JobsContextProvider>
       <App />
     </JobsContextProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
