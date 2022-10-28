@@ -18,6 +18,7 @@ const Home = () => {
   const [filterSeniority, setFilterSeniority] = useState("all");
 
   useEffect(() => {
+    // put this in custom hook:
     const fetchJobs = async () => {
       try {
         const response = await fetch("/jobs");
@@ -56,10 +57,8 @@ const Home = () => {
     }
   };
 
-  const handleClick = (id) => {
+  const handleShowJob = (id) => {
     fetchOneJob(id);
-    // check this
-    // setJob(jobs.filter(job => job._id === id))
   };
 
   const filteredJobs = (items) => {
@@ -107,7 +106,7 @@ const Home = () => {
           {jobs &&
             search(filteredJobs(jobs)).map((job) => (
               <JobItem
-                onClick={() => handleClick(job._id)}
+                onShowJob={() => handleShowJob(job._id)}
                 key={job._id}
                 job={job}
                 clickable={true}

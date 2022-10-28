@@ -4,10 +4,10 @@ import { useJobsContext } from "../hooks/useJobsContext";
 // date fns
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
-const JobItem = ({ job, onClick, clickable, visible }) => {
+const JobItem = ({ job, onShowJob, clickable, visible, onUpdateJob }) => {
   const { dispatch } = useJobsContext();
 
-  const handleClick = async () => {
+  const handleDelete = async () => {
     const response = await fetch(`/jobs/${job._id}`, {
       method: "DELETE",
     });
@@ -20,11 +20,14 @@ const JobItem = ({ job, onClick, clickable, visible }) => {
     }
   };
 
+  const handleUpdate = (id) => {
+    onUpdateJob(id)
+  }
+
   return (
     <Fragment>
-      {/* check this event for admin page: */}
       <div
-        onClick={onClick}
+        onClick={onShowJob}
         className={`relative text-lg text-gray-500 bg-white border border-gray-200 p-5 rounded-xl mb-4 ${
           clickable
             ? "lg:hover:shadow-xl cursor-pointer transition-all ease-in-out"
@@ -40,11 +43,11 @@ const JobItem = ({ job, onClick, clickable, visible }) => {
         {job.createdAt && <p className="text-base">{formatDistanceToNow(new Date(job.createdAt), { addSuffix: true })}</p>}
         {visible && (
           <div className="absolute right-5 bottom-5">
-            <button className="flex justify-center border border-violet-800 rounded-md bg-violet-800 lg:p-1 text-white text-sm w-20 mb-2 lg:leading-6 lg:hover:bg-white lg:hover:text-violet-800 transition-all ease-in-out">
+            <button onClick={() => handleUpdate(job._id)} className="flex justify-center border border-violet-800 rounded-md bg-violet-800 lg:p-1 text-white text-sm w-20 mb-2 lg:leading-6 lg:hover:bg-white lg:hover:text-violet-800 transition-all ease-in-out">
               Update
             </button>
             <button
-              onClick={handleClick}
+              onClick={handleDelete}
               className="flex justify-center border border-violet-800 rounded-md bg-violet-800 lg:p-1 text-white text-sm w-20 lg:leading-6 lg:hover:bg-white lg:hover:text-violet-800 transition-all ease-in-out"
             >
               Delete

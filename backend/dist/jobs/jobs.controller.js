@@ -16,6 +16,7 @@ exports.JobsController = void 0;
 const common_1 = require("@nestjs/common");
 const jobs_service_1 = require("./jobs.service");
 const create_job_dto_1 = require("./dto/create-job.dto");
+const update_job_dto_1 = require("./dto/update-job.dto");
 let JobsController = class JobsController {
     constructor(jobsService) {
         this.jobsService = jobsService;
@@ -29,6 +30,10 @@ let JobsController = class JobsController {
     }
     async findOne(id) {
         return this.jobsService.findOne(id);
+    }
+    async update(id, updateJobDto) {
+        const job = await this.jobsService.update(id, updateJobDto);
+        return job;
     }
     async delete(id) {
         return this.jobsService.delete(id);
@@ -54,6 +59,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], JobsController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_job_dto_1.UpdateJobDto]),
+    __metadata("design:returntype", Promise)
+], JobsController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),

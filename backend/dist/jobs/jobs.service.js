@@ -31,6 +31,23 @@ let JobsService = class JobsService {
     async findOne(id) {
         return this.jobModel.findOne({ _id: id }).exec();
     }
+    async update(id, updateJobDto) {
+        const updatedJob = await this.jobModel.findOne({ _id: id }).exec();
+        if (updateJobDto.name) {
+            updatedJob.name = updateJobDto.name;
+        }
+        if (updateJobDto.location) {
+            updatedJob.location = updateJobDto.location;
+        }
+        if (updateJobDto.seniority) {
+            updatedJob.seniority = updateJobDto.seniority;
+        }
+        if (updateJobDto.description) {
+            updatedJob.description = updateJobDto.description;
+        }
+        updatedJob.save();
+        return updatedJob;
+    }
     async delete(id) {
         return this.jobModel.findByIdAndRemove({ _id: id }).exec();
     }

@@ -1,25 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useJobsContext } from "../../hooks/useJobsContext";
 import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
 
-const CreateJob = () => {
+const UpdateJob = ({ job, handleClick }) => {
   const { dispatch } = useJobsContext();
-  const [name, setName] = useState("");
-  const [seniority, setSeniority] = useState("default");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState(job.name);
+  const [seniority, setSeniority] = useState(job.seniority);
+  const [location, setLocation] = useState(job.location);
+  const [description, setDescription] = useState(job.description);
   const [notification, setNotification] = useState(null);
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    setName(job.name);
+    setSeniority(job.seniority);
+    setLocation(job.location);
+    setDescription(job.description);
+    setNotification("");
+  }, [job]);
+
+  const handleSubmit = async (e, id) => {
     e.preventDefault();
 
     const job = { name, location, seniority, description };
 
     try {
-      const response = await fetch("/jobs", {
-        method: "POST",
+      const response = await fetch(`/jobs/${id}`, {
+        method: "PATCH",
         body: JSON.stringify(job),
         headers: {
           "Content-Type": "application/json",
@@ -33,22 +41,28 @@ const CreateJob = () => {
       }
 
       if (response.ok) {
+        console.log();
         setName("");
         setSeniority("default");
         setLocation("");
         setDescription("");
-        setNotification("New job created successfully.");
-        dispatch({ type: "CREATE_JOB", payload: json });
+        setNotification("This job was updated successfully.");
+        dispatch({ type: "UPDATE_JOB", payload: json });
       }
     } catch (err) {
       console.log(err);
-      setNotification("Could not create a new job.");
+      setNotification("Could not update.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="py-3">
-      <h2 className="text-xl mb-4">Post new job</h2>
+    <form onSubmit={(e) => handleSubmit(e, job._id)} className="py-3">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl mb-4">Update job</h2>
+        <button onClick={() => handleClick(true)} className="bg-violet-800 text-white px-3 py-2 rounded-md mb-4">
+          Back to create new job
+        </button>
+      </div>
       <div className="border-b-2 py-2 mb-5">
         <div className="mb-4">
           <label>
@@ -78,10 +92,10 @@ const CreateJob = () => {
                   <option value={"default"} disabled>
                     Choose an option:
                   </option>
-                  <option>trainee</option>
-                  <option>junior</option>
-                  <option>mid-level</option>
-                  <option>senior</option>
+                  <option value={"trainee"}>trainee</option>
+                  <option value={"junior"}>junior</option>
+                  <option value={"mid-level"}>mid-level</option>
+                  <option value={"senior"}>senior</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
                   <ArrowDown width="12px" height="12px" fill="#374151" />
@@ -103,34 +117,33 @@ const CreateJob = () => {
             </label>
           </div>
         </div>
-        <div>
-          <CKEditor
-            editor={ClassicEditor}
-            config={{
-              toolbar: [
-                "heading",
-                "|",
-                "bold",
-                "italic",
-                "link",
-                "undo",
-                "redo",
-                "bulletedList",
-                "numberedList",
-                "blockQuote",
-              ],
-              placeholder: "Insert job description...",
-            }}
-            onChange={(e, editor) => {
-              const data = editor.getData();
-              setDescription(data);
-            }}
-          />
-        </div>
+        <CKEditor
+          editor={ClassicEditor}
+          config={{
+            toolbar: [
+              "heading",
+              "|",
+              "bold",
+              "italic",
+              "link",
+              "undo",
+              "redo",
+              "bulletedList",
+              "numberedList",
+              "blockQuote",
+            ],
+            placeholder: "Insert job description...",
+          }}
+          data={description}
+          onChange={(e, editor) => {
+            const data = editor.getData();
+            setDescription(data);
+          }}
+        />
       </div>
       <div>
         <button className="bg-violet-800 text-white px-3 py-2 rounded-md mb-4">
-          Create job
+          Update job
         </button>
         {notification && <p>{notification}</p>}
       </div>
@@ -138,4 +151,4 @@ const CreateJob = () => {
   );
 };
 
-export default CreateJob;
+export default UpdateJob;
