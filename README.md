@@ -9,7 +9,7 @@ $ npm install
 $ npm run start:dev
 ```
 
-### Terminal 1
+### Terminal 2
 
 ```bash
 $ cd frontend
